@@ -12,16 +12,19 @@ export default function App() {
 
   // Initial load
   React.useEffect(() => {
-    const savedNotes = storage.getNotes();
-    setNotes(savedNotes);
-    if (savedNotes.length > 0) {
-      setActiveNoteId(savedNotes[0].id);
-    }
+    const loadNotes = async () => {
+      const savedNotes = await storage.getNotes();
+      setNotes(savedNotes);
+      if (savedNotes.length > 0) {
+        setActiveNoteId(savedNotes[0].id);
+      }
+    };
+    loadNotes();
   }, []);
 
   const activeNote = notes.find(n => n.id === activeNoteId) || null;
 
-  const handleNewNote = () => {
+  const handleNewNote = async () => {
     const newNote: Note = {
       id: crypto.randomUUID(),
       title: '',
@@ -34,22 +37,22 @@ export default function App() {
     const updatedNotes = [newNote, ...notes];
     setNotes(updatedNotes);
     setActiveNoteId(newNote.id);
-    storage.saveNotes(updatedNotes);
+    await storage.saveNotes(updatedNotes);
   };
 
-  const handleUpdateNote = (update: Partial<Note>) => {
+  const handleSaveNote = async (update: Partial<Note>) => {
     if (!activeNoteId) return;
     const updatedNotes = notes.map(n => 
       n.id === activeNoteId ? { ...n, ...update, updatedAt: Date.now() } : n
     );
     setNotes(updatedNotes);
-    storage.saveNotes(updatedNotes);
+    await storage.saveNotes(updatedNotes);
   };
 
-  const handleDeleteNote = (id: string) => {
+  const handleDeleteNote = async (id: string) => {
     const updatedNotes = notes.filter(n => n.id !== id);
     setNotes(updatedNotes);
-    storage.saveNotes(updatedNotes);
+    await storage.saveNotes(updatedNotes);
     if (activeNoteId === id) {
       setActiveNoteId(updatedNotes.length > 0 ? updatedNotes[0].id : null);
     }
@@ -77,7 +80,7 @@ export default function App() {
             >
               <Editor
                 note={activeNote}
-                onUpdate={handleUpdateNote}
+                onSave={handleSaveNote}
                 onDelete={() => handleDeleteNote(activeNote.id)}
               />
             </motion.div>

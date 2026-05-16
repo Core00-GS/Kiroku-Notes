@@ -1,39 +1,47 @@
 import { Note } from '../types';
 
-const STORAGE_KEY = 'kiroku_notes_v1';
-
 export const storage = {
-  getNotes: (): Note[] => {
-    const data = localStorage.getItem(STORAGE_KEY);
-    if (!data) return [];
+  getNotes: async (): Promise<Note[]> => {
     try {
-      return JSON.parse(data);
+      const response = await fetch('/api/notes');
+      if (!response.ok) throw new Error('Failed to fetch notes');
+      return await response.json();
     } catch (e) {
-      console.error('Failed to parse notes from storage', e);
+      console.error('Failed to get notes from server', e);
       return [];
     }
   },
 
-  saveNotes: (notes: Note[]): void => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
-  },
-
-  addNote: (note: Note): void => {
-    const notes = storage.getNotes();
-    storage.saveNotes([note, ...notes]);
-  },
-
-  updateNote: (id: string, update: Partial<Note>): void => {
-    const notes = storage.getNotes();
-    const index = notes.findIndex(n => n.id === id);
-    if (index !== -1) {
-      notes[index] = { ...notes[index], ...update, updatedAt: Date.now() };
-      storage.saveNotes(notes);
+  saveNotes: async (notes: Note[]): Promise<void> => {
+    try {
+      const response = await fetch('/api/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(notes),
+      });
+      if (!response.ok) throw new Error('Failed to save notes');
+    } catch (e) {
+      console.error('Failed to save notes to server', e);
     }
   },
 
-  deleteNote: (id: string): void => {
-    const notes = storage.getNotes();
-    storage.saveNotes(notes.filter(n => n.id !== id));
+  // Helpers that wrap the main save/get
+  addNote: async (note: Note): Promise<void> => {
+    const notes = await storage.getNotes();
+    await storage.saveNotes([note, ...notes]);
+  },
+
+  updateNote: async (id: string, update: Partial<Note>): Promise<void> => {
+    const notes = await storage.getNotes();
+    const index = notes.findIndex(n => n.id === id);
+    if (index !== -1) {
+      notes[index] = { ...notes[index], ...update, updatedAt: Date.now() };
+      await storage.saveNotes(notes);
+    }
+  },
+
+  deleteNote: async (id: string): Promise<void> => {
+    const notes = await storage.getNotes();
+    await storage.saveNotes(notes.filter(n => n.id !== id));
   }
 };
