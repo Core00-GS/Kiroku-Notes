@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+@theme {
+  --font-sans: "Inter", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-anime-sky: #e0f2fe;
+  --color-anime-sunset: #ffedd5;
+  --color-anime-sakura: #fdf2f8;
+  --color-glass: rgba(255, 255, 255, 0.7);
+  --color-glass-dark: rgba(255, 255, 255, 0.3);
+}
+
+@layer base {
+  body {
+    @apply antialiased font-sans text-slate-800 bg-slate-50;
+    background-image: 
+      radial-gradient(at 0% 0%, var(--color-anime-sky) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, var(--color-anime-sunset) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, var(--color-anime-sakura) 0px, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+  }
+}
+
+@utility glass-panel {
+  @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-sm transition-all duration-300;
+}
+
+@utility anime-card {
+  @apply glass-panel rounded-2xl p-6 hover:shadow-md hover:scale-[1.01] active:scale-[0.99];
+}
+
+/* Markdown styling */
+.prose {
+  @apply max-w-none;
+}
+.prose h1 { @apply text-2xl font-bold mb-4 mt-6 text-slate-900; }
+.prose h2 { @apply text-xl font-bold mb-3 mt-5 text-slate-800; }
+.prose p { @apply mb-4 leading-relaxed text-slate-700; }
+.prose code { @apply font-mono bg-slate-100 px-1 rounded text-sm; }
+.prose pre { @apply bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto my-4; }
+.prose blockquote { @apply border-l-4 border-slate-300 pl-4 italic text-slate-600; }
+.prose ul { @apply list-disc list-inside mb-4; }
+.prose ol { @apply list-decimal list-inside mb-4; }

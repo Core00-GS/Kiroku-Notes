@@ -1,0 +1,8 @@
+{
+  "name": "Kiroku (記録) Notes",
+  "description": "A beautiful, anime-inspired local-storage note application with Markdown support and Zen aesthetics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
