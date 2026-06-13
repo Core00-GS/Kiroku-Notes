@@ -6,6 +6,7 @@ export interface Note {
   createdAt: number;
   updatedAt: number;
   isPinned?: boolean;
+  isArchived?: boolean;
 }
 
 export type NoteUpdate = Partial<Omit<Note, 'id' | 'createdAt'>>;

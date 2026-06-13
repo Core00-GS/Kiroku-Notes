@@ -14,13 +14,21 @@
 
 @layer base {
   body {
-    @apply antialiased font-sans text-slate-800 bg-slate-50;
+    @apply antialiased font-sans text-slate-800 bg-slate-50 transition-colors duration-500;
     background-image: 
       radial-gradient(at 0% 0%, var(--color-anime-sky) 0px, transparent 50%),
       radial-gradient(at 100% 0%, var(--color-anime-sunset) 0px, transparent 50%),
       radial-gradient(at 100% 100%, var(--color-anime-sakura) 0px, transparent 50%);
     background-attachment: fixed;
     min-height: 100vh;
+  }
+
+  .dark body {
+    @apply text-slate-100 bg-slate-950;
+    background-image: 
+      radial-gradient(at 0% 0%, #1e1b4b 0px, transparent 55%),
+      radial-gradient(at 100% 0%, #3a0e4c 0px, transparent 55%),
+      radial-gradient(at 100% 100%, #090d16 0px, transparent 55%);
   }
 
   /* Custom scrollbar */
@@ -38,6 +46,9 @@
 
 @utility glass-panel {
   @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-sm transition-all duration-300;
+  .dark & {
+    @apply bg-slate-900/60 border-slate-800/50 shadow-none;
+  }
 }
 
 @utility anime-card {
@@ -48,11 +59,11 @@
 .prose {
   @apply max-w-none;
 }
-.prose h1 { @apply text-2xl font-bold mb-4 mt-6 text-slate-900; }
-.prose h2 { @apply text-xl font-bold mb-3 mt-5 text-slate-800; }
-.prose p { @apply mb-4 leading-relaxed text-slate-700; }
-.prose code { @apply font-mono bg-slate-100 px-1 rounded text-sm; }
-.prose pre { @apply bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto my-4; }
-.prose blockquote { @apply border-l-4 border-slate-300 pl-4 italic text-slate-600; }
-.prose ul { @apply list-disc list-inside mb-4; }
-.prose ol { @apply list-decimal list-inside mb-4; }
+.prose h1 { @apply text-2xl font-bold mb-4 mt-6 text-slate-900 transition-colors duration-300; .dark & { @apply text-white; } }
+.prose h2 { @apply text-xl font-bold mb-3 mt-5 text-slate-800 transition-colors duration-300; .dark & { @apply text-slate-100; } }
+.prose p { @apply mb-4 leading-relaxed text-slate-700 transition-colors duration-300; .dark & { @apply text-slate-300; } }
+.prose code { @apply font-mono bg-slate-100 px-1 rounded text-sm transition-colors duration-300; .dark & { @apply bg-slate-800/80 text-sky-300; } }
+.prose pre { @apply bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto my-4 transition-colors duration-300; .dark & { @apply bg-black/50 text-slate-200 border border-slate-800/50; } }
+.prose blockquote { @apply border-l-4 border-slate-300 pl-4 italic text-slate-600 transition-colors duration-300; .dark & { @apply border-indigo-900/80 text-slate-400; } }
+.prose ul { @apply list-disc list-inside mb-4 text-slate-700; .dark & { @apply text-slate-300; } }
+.prose ol { @apply list-decimal list-inside mb-4 text-slate-700; .dark & { @apply text-slate-300; } }
